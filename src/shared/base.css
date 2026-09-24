@@ -1,0 +1,140 @@
+@import 'lenis/dist/lenis.css';
+@import '@fontsource/poppins/400.css';
+@import '@fontsource/poppins/600.css';
+@import '@fontsource/poppins/700.css';
+
+/* Archivo variabile ridotto (scripts/build-font.py): solo latino, pesi 700-900, larghezze 62-125 */
+@font-face {
+  font-family: 'Archivo HLP';
+  src: url('/fonts/archivo-hlp.woff2') format('woff2');
+  font-weight: 700 900;
+  font-stretch: 62% 125%;
+  font-display: swap;
+}
+
+/* Token dall'identità osservata (ricerca/DESIGN.md). Un solo accento interattivo: --red. */
+:root {
+  --red: #ff313e;
+  --red-ink: #b51f2b;       /* proposto: testo piccolo leggibile su crema */
+  --wm-red: #dc152b;        /* rosso del wordmark campionato dal raster */
+  --cream: #fef6d1;
+  --cream-2: #f9e9c8;
+  --ink: #0d0404;
+  --ink-2: #3b2a22;
+  --gold: #feab03;
+  --green: #2e7f39;
+  --yellow: #fab405;        /* giallo del packaging, campionato dalle foto */
+  --white: #fff;
+
+  --f-display: 'Archivo HLP', 'Arial Black', system-ui, sans-serif;
+  --f-body: 'Poppins', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --gutter: clamp(1rem, 4vw, 3.5rem);
+  --radius: 14px;
+  --header-h: 72px;
+  color-scheme: light;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--cream);
+  color: var(--ink);
+  font-family: var(--f-body);
+  font-size: clamp(1rem, 0.96rem + 0.2vw, 1.0625rem);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: clip;
+}
+img, picture, svg, canvas, video { display: block; max-width: 100%; }
+picture img { width: 100%; height: 100%; object-fit: cover; }
+/* dentro cornici a proporzione fissa la foto riempie sempre il riquadro */
+.l-step__img > picture, .l-dish__img > picture, .c-step__img > picture, .c-card__img > picture, .c-extra__img > picture { height: 100%; }
+h1, h2, h3, h4, p, figure, blockquote, ul, ol, dl, dd { margin: 0; }
+ul, ol { padding: 0; list-style: none; }
+a { color: inherit; }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+table { border-collapse: collapse; }
+
+:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; border-radius: 4px; }
+
+/* il primo viewport resta invisibile finché Archivo non è pronto: così il cambio di font non sposta nulla */
+.fonts-wait .l-hero > *, .fonts-wait .l-head, .fonts-wait .c-head, .fonts-wait .c-hero__words, .fonts-wait .c-hero__beats, .fonts-wait .c-hero__foot { visibility: hidden; }
+
+/* posizioni di partenza del reveal già nel CSS: quando il testo compare non c'è alcun salto */
+@media (prefers-reduced-motion: no-preference) {
+  .js .l-hero__title .l-mask > span { transform: translateY(45%); }
+  .js .c-hero__w--l { transform: translateX(-30%); }
+  .js .c-hero__w--r { transform: translateX(30%); }
+  .js .c-step:not(:first-child) { visibility: hidden; } /* i passi 2 e 3 li mostra il pin del ritual */
+}
+
+.propuesta {
+  position: fixed; left: .75rem; bottom: .75rem; z-index: 60; pointer-events: none;
+  padding: .3rem .7rem; border-radius: 999px; background: var(--ink); color: var(--cream);
+  font-size: .72rem; font-weight: 600; letter-spacing: .01em; opacity: .88;
+}
+
+/* contatori dei loader: riquadro fisso, le cifre cambiano senza spostare nulla */
+[data-count] { display: block; width: 100%; font-variant-numeric: tabular-nums; }
+
+.sr-only {
+  position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+.skip {
+  position: fixed; left: 1rem; top: -4rem; z-index: 1000; padding: .75rem 1rem;
+  background: var(--ink); color: var(--cream); border-radius: 8px; text-decoration: none; font-weight: 600;
+  transition: top .3s;
+}
+.skip:focus { top: 1rem; }
+
+/* Titoli: Archivo è l'equivalente dichiarato della sans pesante dei social */
+.display {
+  font-family: var(--f-display);
+  font-weight: 900;
+  font-stretch: 125%;
+  text-transform: uppercase;
+  line-height: .88;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+/* "por confirmar": dato mancante o in conflitto nel ticket, da validare col cliente */
+.tbc {
+  display: inline-flex; align-items: center; gap: .45em;
+  font-family: var(--f-body); font-size: .78rem; font-weight: 500; line-height: 1.3;
+  color: var(--ink-2);
+  padding: .3em .7em .3em .55em;
+  border: 1.5px dashed currentColor;
+  border-radius: 999px;
+  text-transform: none; letter-spacing: 0;
+}
+.tbc__dot { width: .5em; height: .5em; border-radius: 50%; background: var(--gold); flex: none; }
+
+/* Stato live della sede */
+.status { display: inline-flex; align-items: center; gap: .5em; font-weight: 600; font-size: .9rem; }
+.status__dot { position: relative; width: .62em; height: .62em; border-radius: 50%; background: #9a8c7a; flex: none; }
+.status.is-open .status__dot { background: #1f9d3a; }
+/* impulso solo con transform/opacity: resta sul compositor, niente repaint continui */
+.status.is-open .status__dot::after { content: ''; position: absolute; inset: 0; border-radius: 50%; background: inherit; animation: pulse 2.4s cubic-bezier(.2,.8,.2,1) infinite; }
+.status.is-open.is-soon .status__dot { background: var(--gold); }
+@keyframes pulse { from { transform: scale(1); opacity: .55; } 70%, to { transform: scale(2.8); opacity: 0; } }
+
+/* Bottoni piattaforma */
+.btn-plat {
+  display: inline-flex; align-items: center; gap: .55em;
+  padding: .85em 1.25em; border-radius: 999px;
+  background: var(--red); color: var(--white);
+  font-weight: 700; font-size: 1.2rem; line-height: 1; text-decoration: none;
+  transition: transform .3s cubic-bezier(.2,.8,.2,1), background-color .3s;
+}
+.btn-plat svg { width: .8em; height: .8em; }
+.btn-plat:hover { transform: translateY(-2px); background: var(--wm-red); }
+.btn-plat:active { transform: translateY(0) scale(.98); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+}
