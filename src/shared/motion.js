@@ -30,7 +30,7 @@ export function initScroll({ headerOffset = 0 } = {}) {
     const offset = typeof headerOffset === 'function' ? headerOffset() : headerOffset;
     if (lenis) lenis.scrollTo(target, { offset: -offset, duration: 1.4 });
     else target.scrollIntoView();
-    history.replaceState(null, '', id);
+    // niente #ancora nell'URL: al ricaricamento il browser (Safari) ci saltava dopo l'intro
     target.setAttribute('tabindex', '-1');
     target.focus({ preventScroll: true });
   });

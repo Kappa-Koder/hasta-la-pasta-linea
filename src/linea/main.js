@@ -9,6 +9,13 @@ const root = document.documentElement;
 if (!reduced) root.classList.add('motion');
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 
+// Ricaricando si riparte sempre dall'inizio. Un link diretto a una sezione (…/#carta) ci porta
+// dopo l'intro, quando la linea e il pin della carta hanno già le loro misure. L'ancora esce
+// subito dall'URL, così il browser non la può più usare per saltare da solo a pagina caricata.
+const navType = performance.getEntriesByType?.('navigation')[0]?.type;
+const hashTarget = navType !== 'reload' && location.hash.length > 1 ? document.getElementById(decodeURIComponent(location.hash.slice(1))) : null;
+if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+
 const head = document.querySelector('[data-head]');
 const cajita = document.querySelector('[data-cajita]');
 const desk = window.matchMedia('(min-width: 900px)');
@@ -225,6 +232,13 @@ function initCarta() {
 /* ---- Loader (PDF cap. 5): l'anello del caricamento diventa l'anello della prima fermata ---- */
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
+function goToHash() {
+  if (!hashTarget) return;
+  const offset = -head.offsetHeight;
+  if (lenis) lenis.scrollTo(hashTarget, { offset, duration: 1.4 });
+  else window.scrollTo(0, hashTarget.getBoundingClientRect().top + window.scrollY + offset);
+}
+
 function heroIntro() {
   const tl = gsap.timeline({ defaults: { ease: EASE.out } });
   tl.to('.l-hero__title .l-mask > span', { y: 0, yPercent: 0, duration: 1.1, stagger: 0.08 }, 0)
@@ -236,7 +250,7 @@ function heroIntro() {
 
 async function runLoader() {
   const el = document.querySelector('[data-loader]');
-  if (reduced || !el) { el?.remove(); root.classList.add('is-loaded'); intro = 1; return; }
+  if (reduced || !el) { el?.remove(); root.classList.add('is-loaded'); intro = 1; goToHash(); return; }
   lenis?.stop();
   window.scrollTo(0, 0);
   // titolo e foto restano dipinti sotto il loader (LCP immediato), si muovono solo al reveal
@@ -269,8 +283,8 @@ async function runLoader() {
     .to(ringFig, { scale: 1, duration: 1.1, ease: EASE.out }, 0.75)
     .add(heroIntro(), 0.7)
     // scroll e tap tornano appena l'anello è al suo posto, senza aspettare la fine del reveal
-    .add(() => { el.querySelector('.l-loader__bg').style.pointerEvents = 'none'; lenis?.start(); }, 1.15)
-    .add(() => { el.remove(); root.classList.add('is-loaded'); }, 2.25);
+    .add(() => { el.querySelector('.l-loader__bg').style.pointerEvents = 'none'; window.scrollTo(0, 0); lenis?.start(); }, 1.15)
+    .add(() => { el.remove(); root.classList.add('is-loaded'); goToHash(); }, 2.25);
 }
 
 /* ---- Avvio ---- */
