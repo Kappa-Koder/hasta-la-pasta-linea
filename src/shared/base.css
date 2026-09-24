@@ -76,6 +76,7 @@ table { border-collapse: collapse; }
   padding: .3rem .7rem; border-radius: 999px; background: var(--ink); color: var(--cream);
   font-size: .72rem; font-weight: 600; letter-spacing: .01em; opacity: .88;
 }
+@media (min-width: 900px) { .propuesta { left: auto; right: .75rem; } } /* a sinistra c'è la legenda delle sedi */
 
 /* contatori dei loader: riquadro fisso, le cifre cambiano senza spostare nulla */
 [data-count] { display: block; width: 100%; font-variant-numeric: tabular-nums; }
