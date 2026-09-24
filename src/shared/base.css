@@ -36,7 +36,7 @@
 }
 
 *, *::before, *::after { box-sizing: border-box; }
-html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; -webkit-tap-highlight-color: transparent; }
 body {
   margin: 0;
   background: var(--cream);
@@ -56,6 +56,9 @@ h1, h2, h3, h4, p, figure, blockquote, ul, ol, dl, dd { margin: 0; }
 ul, ol { padding: 0; list-style: none; }
 a { color: inherit; }
 button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+/* controlli: tap immediato (niente attesa del doppio tap) e nessuna selezione del testo a pressione lunga */
+a, button { touch-action: manipulation; }
+button, .l-cta, .btn-plat { -webkit-user-select: none; user-select: none; }
 table { border-collapse: collapse; }
 
 :focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; border-radius: 4px; }
@@ -133,8 +136,8 @@ table { border-collapse: collapse; }
   transition: transform .3s cubic-bezier(.2,.8,.2,1), background-color .3s;
 }
 .btn-plat svg { width: .8em; height: .8em; }
-.btn-plat:hover { transform: translateY(-2px); background: var(--wm-red); }
-.btn-plat:active { transform: translateY(0) scale(.98); }
+@media (hover: hover) and (pointer: fine) { .btn-plat:hover { transform: translateY(-2px); background: var(--wm-red); } }
+.btn-plat:active { transform: translateY(0) scale(.97); background: var(--wm-red); transition-duration: .1s; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }

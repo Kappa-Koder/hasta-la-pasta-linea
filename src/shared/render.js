@@ -9,9 +9,6 @@ const here = path.dirname(fileURLToPath(import.meta.url));
 const IMAGES = JSON.parse(fs.readFileSync(path.join(here, 'images.json'), 'utf8'));
 const svg = (name) => fs.readFileSync(path.join(here, '../assets/logo', name), 'utf8').replace(/<!--[\s\S]*?-->/g, '').trim();
 
-// base del sito (GitHub Pages: /<repo>/), impostata da vite.config.js
-const BASE = () => globalThis.HLP_BASE || '/';
-
 export const esc = (s = '') => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
 // Il wordmark è inserito una volta come <symbol> e richiamato con <use>: i colori passano per
@@ -38,10 +35,10 @@ export const tbc = (text) => `<span class="tbc" title="${esc(text)}"><span class
 export function picture(name, { alt = '', sizes = '100vw', cls = '', eager = false, imgCls = '' } = {}) {
   const img = IMAGES[name];
   if (!img) throw new Error(`immagine mancante: ${name}`);
-  const set = (ext) => img.sizes.map((w) => `${BASE()}img/${name}-${w}.${ext} ${w}w`).join(', ');
+  const set = (ext) => img.sizes.map((w) => `/img/${name}-${w}.${ext} ${w}w`).join(', ');
   const largest = img.sizes[img.sizes.length - 1];
   const h = Math.round((img.h / img.w) * largest);
-  return `<picture class="${cls}"><source type="image/avif" srcset="${set('avif')}" sizes="${sizes}"><source type="image/webp" srcset="${set('webp')}" sizes="${sizes}"><img class="${imgCls}" src="${BASE()}img/${name}-${img.sizes[0]}.webp" width="${largest}" height="${h}" alt="${esc(alt)}" ${eager ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async"></picture>`;
+  return `<picture class="${cls}"><source type="image/avif" srcset="${set('avif')}" sizes="${sizes}"><source type="image/webp" srcset="${set('webp')}" sizes="${sizes}"><img class="${imgCls}" src="/img/${name}-${img.sizes[0]}.webp" width="${largest}" height="${h}" alt="${esc(alt)}" ${eager ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async"></picture>`;
 }
 
 export const sedeNombre = (s) => `${s.ciudad} · ${s.zona}`;

@@ -2,9 +2,9 @@ import { defineConfig } from 'vite';
 import { resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
-// GitHub Pages pubblica il sito sotto /<nome-repo>/: tutti i percorsi passano da qui.
+// GitHub Pages pubblica il sito sotto /<nome-repo>/. I percorsi nell'HTML si scrivono da radice
+// (/img/..., /fonts/...): Vite aggiunge la base sia in dev sia in build.
 const BASE = process.env.BASE_PATH || '/hasta-la-pasta-linea/';
-globalThis.HLP_BASE = BASE;
 
 const TEMPLATES = resolve(__dirname, 'src/linea/templates.js');
 

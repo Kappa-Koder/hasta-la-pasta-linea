@@ -268,7 +268,9 @@ async function runLoader() {
     .to(el.querySelector('.l-loader__bg'), { opacity: 0, duration: 0.8, ease: 'power2.inOut' }, 0.35)
     .to(ringFig, { scale: 1, duration: 1.1, ease: EASE.out }, 0.75)
     .add(heroIntro(), 0.7)
-    .add(() => { el.remove(); root.classList.add('is-loaded'); lenis?.start(); }, 2.25);
+    // scroll e tap tornano appena l'anello è al suo posto, senza aspettare la fine del reveal
+    .add(() => { el.querySelector('.l-loader__bg').style.pointerEvents = 'none'; lenis?.start(); }, 1.15)
+    .add(() => { el.remove(); root.classList.add('is-loaded'); }, 2.25);
 }
 
 /* ---- Avvio ---- */
